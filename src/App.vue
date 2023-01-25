@@ -6,8 +6,7 @@
         <input type="text" class="search-bar" placeholder="Search city..." v-model="query" @keypress="fetchWeather" />
         {{ query }}
       </div>
-      <!--here-->
-      <div class="weather-wrap" v-if="typeof weather.main != 'undefined' " >
+      <div class="weather-wrap" v-if="typeof weather.main != 'undefined' ">
         <div class="location-box">
           <div class="location">{{weatherLocation}}</div>
           <div class="date">{{dateBuilder()}}</div>
@@ -45,7 +44,6 @@ export default {
            */
 
         const response = await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
-        //debugger
         const data = await response.json();
         this.setResults(data);
       }
@@ -67,7 +65,6 @@ export default {
 
   computed: {
     weatherLocation() {
-      //return {{ weather.name }}, {{ weather.sys.country }};
       return `${this.weather.name} ${this.weather.sys.country}`;
     }
   },
