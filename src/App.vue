@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="typeof weather.main!='undefined' && weather.main.temp>16 ? 'warm' : ''">
-    <h1>Weather Forecast</h1>
+    <AppTitle/>
     <main>
       <div class="search-box">
         <input type="text" class="search-bar" placeholder="Search city..." v-model="query" @keypress="fetchWeather" />
@@ -22,52 +22,51 @@
 </template>
 
 <script>
+import AppTitle from "./components/AppTitle.vue";
+
 export default {
-  name: "app",
-  data() {
-    return {
-      api_key: '36e015ed2e6493a7d121c7d319743eed',
-      url_base: "https://api.openweathermap.org/data/2.5/",
-      query: '',
-      weather: {}
-    }
-  },
-
-  methods: {
-    async fetchWeather(e) {
-      if (e.key == "Enter") {
-
-          /*fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
-          .then(res => {
-            return res.json();
-          }).then(this.setResults);
-           */
-
-        const response = await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
-        const data = await response.json();
-        this.setResults(data);
-      }
+    name: "app",
+    data() {
+        return {
+            api_key: "36e015ed2e6493a7d121c7d319743eed",
+            url_base: "https://api.openweathermap.org/data/2.5/",
+            query: "",
+            weather: {}
+        };
     },
-    setResults(results) {
-      this.weather = results;
+    methods: {
+        async fetchWeather(e) {
+            if (e.key == "Enter") {
+                /*fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+                .then(res => {
+                  return res.json();
+                }).then(this.setResults);
+                 */
+                const response = await fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`);
+                const data = await response.json();
+                this.setResults(data);
+            }
+        },
+        setResults(results) {
+            this.weather = results;
+        },
+        dateBuilder() {
+            let d = new Date();
+            let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let day = days[d.getDay()];
+            let date = d.getDate();
+            let month = months[d.getMonth()];
+            let year = d.getFullYear();
+            return `${day} ${date} ${month} ${year}`;
+        }
     },
-    dateBuilder() {
-      let d = new Date();
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      let day = days[d.getDay()];
-      let date = d.getDate();
-      let month = months[d.getMonth()];
-      let year = d.getFullYear();
-      return `${day} ${date} ${month} ${year}`;
-    }
-  },
-
-  computed: {
-    weatherLocation() {
-      return `${this.weather.name} ${this.weather.sys.country}`;
-    }
-  },
+    computed: {
+        weatherLocation() {
+            return `${this.weather.name} ${this.weather.sys.country}`;
+        }
+    },
+    components: { AppTitle }
 }
 </script>
 
